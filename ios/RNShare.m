@@ -84,7 +84,7 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             EmailShare *shareCtl = [[EmailShare alloc] init];
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         } else if([social isEqualToString:@"wechat"]) {
-          NSURL *url = [NSURL URLWithString:aData[RCTWXShareImageUrl]];
+          NSURL *url = [NSURL URLWithString:[options objectForKey:@"url"]];
           NSURLRequest *imageRequest = [NSURLRequest requestWithURL:url];
           NSData * imageData = [[NSData alloc] initWithContentsOfURL: url];
           UIImage *image = [UIImage imageWithData: imageData];
