@@ -14,6 +14,38 @@ import Overlay from './components/Overlay';
 import Sheet from './components/Sheet';
 import Button from './components/Button';
 
+let isAppRegistered = false;
+const { WeChat, WechatShare } = NativeModules;
+
+function wrapRegisterApp(nativeFunc) {
+  if (!nativeFunc) {
+    return undefined;
+  }
+  return (...args) => {
+    if (isAppRegistered) {
+      // FIXME(Yorkie): we ignore this error if AppRegistered is true.
+      return Promise.resolve(true);
+    }
+    isAppRegistered = true;
+    return new Promise((resolve, reject) => {
+      nativeFunc.apply(null, [
+        ...args,
+        (error, result) => {
+          if (!error) {
+            return resolve(result);
+          }
+          if (typeof error === 'string') {
+            return reject(new Error(error));
+          }
+          reject(error);
+        },
+      ]);
+    });
+  };
+}
+
+const registerApp = wrapRegisterApp(WeChat.registerApp);
+
 const styles = StyleSheet.create({
     actionSheetContainer: {
       flex: 1,
@@ -31,6 +63,10 @@ const styles = StyleSheet.create({
 });
 
 class RNShare {
+  static register(id) {
+    registerApp(id);
+  }
+  
   static open(options) {
     return new Promise((resolve, reject) => {
       if (Platform.OS === "ios") {

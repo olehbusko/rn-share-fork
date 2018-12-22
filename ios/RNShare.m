@@ -44,6 +44,8 @@
 #import "WhatsAppShare.h"
 #import "GooglePlusShare.h"
 #import "EmailShare.h"
+#import "WXApiObject.h"
+#import "WXApi.h"
 
 @implementation RNShare
 - (dispatch_queue_t)methodQueue
@@ -56,7 +58,7 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
                   failureCallback:(RCTResponseErrorBlock)failureCallback
                   successCallback:(RCTResponseSenderBlock)successCallback)
 {
-    
+
     NSString *social = [RCTConvert NSString:options[@"social"]];
     if (social) {
         NSLog(social);
@@ -74,13 +76,46 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         } else if([social isEqualToString:@"whatsapp"]) {
             NSLog(@"TRY OPEN whatsapp");
-            
+
             WhatsAppShare *shareCtl = [[WhatsAppShare alloc] init];
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         } else if([social isEqualToString:@"email"]) {
             NSLog(@"TRY OPEN email");
             EmailShare *shareCtl = [[EmailShare alloc] init];
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+        } else if([social isEqualToString:@"wechat"]) {
+          NSURL *url = [NSURL URLWithString:aData[RCTWXShareImageUrl]];
+          NSURLRequest *imageRequest = [NSURLRequest requestWithURL:url];
+          NSData * imageData = [[NSData alloc] initWithContentsOfURL: url];
+          UIImage *image = [UIImage imageWithData: imageData];
+          WXImageObject *imageObject = [WXImageObject object];
+          imageObject.imageData = UIImagePNGRepresentation(image);
+
+          WXMediaMessage *message = [WXMediaMessage message];
+          message.title = [options objectForKey:@"title"];
+          message.description = [options objectForKey:@"message"];
+          [message setThumbImage:image];
+          //message.mediaObject = mediaObject;
+
+          WXWebpageObject *webpageObject = [WXWebpageObject object];
+          webpageObject.webpageUrl = @"https://itunes.apple.com/us/app/air-translator-translation-any-time-anywhere/id1119155198?mt=8";
+          message.mediaObject = webpageObject;
+
+          SendMessageToWXReq* req = [SendMessageToWXReq new];
+          req.bText = NO;
+          req.scene = WXSceneSession;
+          req.message = message;
+
+          BOOL success = [WXApi sendReq:req];
+
+          if (success) {
+            successCallback(@[]);
+          } else {
+            NSString *errorMessage = @"Not installed";
+            NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
+            NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
+            return failureCallback(error);
+          }
         }
     } else {
         RCTLogError(@"key 'social' missing in options");
