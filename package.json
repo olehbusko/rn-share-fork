@@ -1,0 +1,54 @@
+{
+  "_args": [
+    [
+      "react-native-share@1.0.27",
+      "/Users/olehbusko/Desktop/AirTranslator"
+    ]
+  ],
+  "_from": "react-native-share@1.0.27",
+  "_id": "react-native-share@1.0.27",
+  "_inBundle": false,
+  "_integrity": "sha512-fSf+kJHy5OHfSl66hRZNf+584QH4Gp6O0BCKgQgMJwEnTutk6oBSSUHOa5zQ3W8GqbnhvMJSext7+mJXiEHDsA==",
+  "_location": "/react-native-share",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "react-native-share@1.0.27",
+    "name": "react-native-share",
+    "escapedName": "react-native-share",
+    "rawSpec": "1.0.27",
+    "saveSpec": null,
+    "fetchSpec": "1.0.27"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-share/-/react-native-share-1.0.27.tgz",
+  "_spec": "1.0.27",
+  "_where": "/Users/olehbusko/Desktop/AirTranslator",
+  "author": {
+    "name": "Esteban Fuentealba",
+    "email": "efuentealba@json.cl"
+  },
+  "bugs": {
+    "url": "https://github.com/EstebanFuentealba/react-native-share/issues"
+  },
+  "description": "Social Share, Sending Simple Data to Other Apps",
+  "homepage": "https://github.com/EstebanFuentealba/react-native-share#readme",
+  "keywords": [
+    "react-component",
+    "react-native",
+    "android",
+    "ios",
+    "windows"
+  ],
+  "license": "MIT",
+  "name": "react-native-share",
+  "nativePackage": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EstebanFuentealba/react-native-share.git"
+  },
+  "version": "1.0.27"
+}
